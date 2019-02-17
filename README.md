@@ -1,0 +1,1 @@
+A simple todo app built to learn more about django web framework
