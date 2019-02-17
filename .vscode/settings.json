@@ -1,0 +1,4 @@
+{
+  "python.pythonPath": "/Users/giancarlos/.virtualenvs/todo_v1/bin/python",
+  "emmet.includeLanguages": {"django-html": "html"}
+}

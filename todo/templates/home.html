@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Todo home</title>
+  <style>
+    form {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      {% if not request.user.is_authenticated %}
+        <li>
+          <a href="{% url 'login' %}">Login</a>
+        </li>
+        <li>
+          <a href="{% url 'register' %}">Register</a>
+        </li>
+      {% else %}
+        <li>
+          <a href="{% url 'logout' %}">Logout</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% if request.user.is_authenticated %}
+    <h1>Hey!, welcome {{ request.user.username }}!</h1>
+    {% for todo in todos %}
+      <p>
+        <form action="{% url 'todo:complete_todo' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" value={{ todo.id }} name="todo_id" />
+          <label style="{% if todo.is_completed %}text-decoration: line-through{% endif %}">
+            {% comment %} <input
+              type="checkbox"
+              {% if todo.is_completed %}checked{% endif %}
+              name="todo_completed"
+              value="{% if todo.is_completed %}completed{% else %}incompleted{% endif %}"
+            /> {% endcomment %}
+            {{ todo.name }} - {{ todo.created_at }}
+          </label>
+          <button type="submit">
+            {% if todo.is_completed %}
+              Mark as incompleted
+            {% else %}
+              Mark as done
+            {% endif %}
+          </button>
+        </form>
+        <a href="{% url 'todo:edit_todo' todo.id %}">Edit</a>
+        <form action="{% url 'todo:delete_todo' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" value={{ todo.id }} name="todo_id" />
+          <button type="submit">Delete</button>
+        </form>
+      </p>
+    {% endfor %}
+    <br />
+    <p>Create a new todo</p>
+    <form action="{% url 'todo:save_todo' %}" method="POST">
+      {% csrf_token %}
+      <input required autofocus type="text" name="todo_name" id="todo_name">
+      <button type="submit">Save Todo</button>
+    </form>
+  {% else %}
+    <h1>Welcome!</h1>
+    <p>Login/Register to create new todos!</p>
+  {% endif %}
+  {% comment %} <script>
+    const input = document.querySelector('#todo_name');
+    if (input) {
+      input.focus();
+    }
+  </script> {% endcomment %}
+</body>
+</html>

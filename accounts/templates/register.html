@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Register Page</title>
+</head>
+<body>
+  <h1>Register page</h1>
+  {% if message %}
+    <p style="font-size: 24px; color: red;">
+      {{ message }}
+    </p>
+  {% endif %}
+  <form action="{% url 'register' %}" method="POST">
+    {% csrf_token %}
+    <p>
+      <label>
+        Username:
+        <input type="text" name="username" required autofocus>
+      </label>
+    </p>
+    <p>
+      <label>
+        Password:
+        <input type="password" name="password" required />
+      </label>
+    </p>
+    <p>
+      <label>
+        Password confirmation:
+        <input type="password" name="password_confirmation" required />
+      </label>
+    </p>
+    <button type="submit">Register</button>
+  </form>
+</body>
+</html>
